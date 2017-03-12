@@ -16,10 +16,11 @@ module Mobility
           (@__mobility_table_joined ||= []) << table_name
           t = translation_class.arel_table
           m = arel_table
+          locale = options[:locale] || Mobility.locale
           join_type = options[:outer_join] ? Arel::Nodes::OuterJoin : Arel::Nodes::InnerJoin
           joins(m.join(t, join_type).
                 on(t[foreign_key].eq(m[:id]).
-                   and(t[:locale].eq(Mobility.locale))).join_sources)
+                   and(t[:locale].eq(locale))).join_sources)
         end
 
         # Note that Mobility will try to use inner/outer joins appropriate to the query,

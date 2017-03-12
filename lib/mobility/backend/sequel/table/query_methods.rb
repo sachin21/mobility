@@ -15,12 +15,10 @@ module Mobility
           return self if (@__mobility_table_joined || []).include?(table_name)
           (@__mobility_table_joined ||= []) << table_name
           join_type = options[:outer_join] ? :left_outer : :inner
+          locale = (options[:locale] || Mobility.locale).to_s
           join_table(join_type,
                      translation_class.table_name,
-                     {
-                       locale: Mobility.locale.to_s,
-                       foreign_key => ::Sequel[model.table_name][:id]
-                     })
+                     { locale: locale, foreign_key => ::Sequel[model.table_name][:id] })
         end
 
         # See note in AR Table QueryMethods class about limitations of

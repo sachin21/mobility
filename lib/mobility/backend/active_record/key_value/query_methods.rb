@@ -11,10 +11,11 @@ module Mobility
           attributes.inject(self) do |relation, attribute|
             t = translations_class.arel_table.alias(:"#{attribute}_#{association_name}")
             m = arel_table
+            locale = options[:locale] || Mobility.locale
             join_type = options[:outer_join] ? Arel::Nodes::OuterJoin : Arel::Nodes::InnerJoin
             relation.joins(m.join(t, join_type).
                            on(t[:key].eq(attribute).
-                              and(t[:locale].eq(Mobility.locale).
+                              and(t[:locale].eq(locale).
                                   and(t[:translatable_type].eq(name).
                                       and(t[:translatable_id].eq(m[:id]))))).join_sources)
           end

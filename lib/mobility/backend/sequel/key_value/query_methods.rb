@@ -9,11 +9,12 @@ module Mobility
         define_method :"join_#{association_name}" do |*attributes, **options|
           attributes.inject(self) do |relation, attribute|
             join_type = options[:outer_join] ? :left_outer : :inner
+            locale = (options[:locale] || Mobility.locale).to_s
             relation.join_table(join_type,
                                 translations_class.table_name,
                                 {
                                   key: attribute.to_s,
-                                  locale: Mobility.locale.to_s,
+                                  locale: locale,
                                   translatable_type: model.name,
                                   translatable_id: ::Sequel[:"#{model.table_name}"][:id]
                                 },
